@@ -383,7 +383,15 @@ class Kohana_Mailer {
 
             foreach ($this->attachments as $file)
             {
-                $this->message->attach(Swift_Attachment::fromPath($file));
+                if (is_array($file))
+                {
+                    $attachment = call_user_func_array('Swift_Attachment::newinstance', $file);
+                    $this->message->attach($attachment);
+                }
+                else
+                {
+                    $this->message->attach(Swift_Attachment::fromPath($file));
+                }
             }
         }
 
